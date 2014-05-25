@@ -17,9 +17,8 @@ class EventController < WebsocketRails::BaseController
       config.auth_method        = :oauth
     end
 
-    @tweets = []
     TweetStream::Client.new.locations(-87.739906, 41.816073, -87.639656, 41.956139) do |status, client|
-      @tweet = [status[:geo][:coordinates], status.text, status[:user][:screen_name],status[:user][:profile_image_url_https]]
+      @tweet = [status[:geo][:coordinates], status.text, status[:user][:screen_name], status[:user][:profile_image_url_https]]
       if @tweet[0][0] < 42.022686 && @tweet[0][0] > 41.774084 && @tweet[0][1] > -87.957573 && @tweet[0][1] < -87.501812 && @tweet[1][0] != "@"
         send_message :tweet_success, @tweet, namespace: :events
       end
@@ -90,6 +89,7 @@ class EventController < WebsocketRails::BaseController
       end
     end
     send_message :eventful_success, @current_events, namespace: :events
+    puts "EVENTS have been sent++++++++++++++++"
   end
 
   def eventbrite_fetcher
